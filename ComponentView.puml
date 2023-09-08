@@ -1,0 +1,53 @@
+@startuml
+'https://plantuml.com/component-diagram
+
+actor User
+
+node "Client" {
+package Ping_SpringBootApp {
+  interface HTTP
+  HTTP - [Client Component]
+  file truststore.jks as tsc
+  file keystore.jks as ksc
+  HTTP <.u. User : /certPing and\n /normalPing
+ }
+
+ note bottom of tsc
+     Contains the CA which has signed
+     the Server certificate. This is required
+     to accept self signed certificates by the
+     Servers Organization when calling the
+     /Pong endpoint.
+ end note
+
+ note bottom of ksc
+      Contains the client certificate
+      Signed by Clients own CA.
+ end note
+
+}
+
+node "Server" {
+  package Pong_SpringBootApp {
+  interface HTTPS
+  HTTPS - [Server Component]
+  [Client Component] --> HTTPS : "/Pong"
+  file truststore.jks as tss
+  file keystore.jks as kss
+  }
+
+  note bottom of tss
+       Contains the (client) CA which
+       has signed the client certificate
+       or alternatively the client certificate
+   end note
+
+   note bottom of kss
+        Contains the server certificate
+        Signed by Servers own CA.
+   end note
+
+
+}
+
+@enduml
