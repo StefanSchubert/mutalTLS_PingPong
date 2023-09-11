@@ -1,8 +1,23 @@
 server:
-  port: 8090
+  port: 8443
+  ssl:
+    key-store: classpath:backend.p12
+    key-store-password: changeit
+    key-store-type: PKCS12
+    # key-alias defines which cert to fetch and it need to match the -name attribute from the openssl command
+    key-alias: servercert
+    trust-store: classpath:clientRootCA.p12
+    trust-store-type: PKCS12
+    trust-store-password: changeit
+    # client-auth is the important one, which activates the *mutal* TLS challenge.
+    client-auth: need
   servlet:
     context-path: /
 
 spring:
   application:
     name: pingpong-backend
+
+logging:
+  level:
+    org.springframework: DEBUG

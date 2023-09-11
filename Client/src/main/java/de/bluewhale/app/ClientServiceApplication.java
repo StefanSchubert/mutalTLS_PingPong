@@ -4,18 +4,15 @@
  *
  */
 
-package de.bluewhale.app;
-
-import org.springframework.boot.SpringApplication;
+package de.bluewhale.app;import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.cache.annotation.EnableCaching;
 
 @EnableCaching
 @SpringBootApplication
-public class BackendServiceApplication {
+public class ClientServiceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(BackendServiceApplication.class, args);
+        SpringApplication.run(ClientServiceApplication.class, args);
     }
 }

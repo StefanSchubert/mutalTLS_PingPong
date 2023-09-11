@@ -1,0 +1,22 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+# No Spring-Boot Standard (which would start with server: and would configure the netty or tomcat)
+# to set the context for INBOUND tls. This configuration here is being read in programmatically
+# in our factories and will be used for OUTBOUND traffic, in our case by WebFlux.
+client:
+  ssl:
+    keyStore: client.p12
+    keyStorePassword: changeit
+    trustStore: backendRootCA.p12
+    trustStorePassword: changeit
+
+spring:
+  application:
+    name: pingpong-client
+  # Disable requesting basic auth standard security of the spring-boot-starter-security dependency
+  security:
+    basic:
+      enabled: false
