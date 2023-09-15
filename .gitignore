@@ -3,6 +3,13 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+Certificate_Factory/*.key
+Certificate_Factory/*.crt
+Certificate_Factory/*.csr
+Certificate_Factory/*.srl
+Backend/src/main/resources/*.p12
+Client/src/main/resources/*.p12
+
 ### IntelliJ IDEA ###
 .idea/
 *.iws

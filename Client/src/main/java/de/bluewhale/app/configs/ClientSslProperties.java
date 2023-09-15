@@ -24,7 +24,9 @@ public class ClientSslProperties {
 
     private String trustStore;
     private String trustStorePassword;
+    private String trustStoreType;
     private String keyStore;
+    private String keyStoreType;
     private String keyStorePassword;
 
 }

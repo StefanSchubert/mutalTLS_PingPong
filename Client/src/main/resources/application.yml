@@ -9,8 +9,10 @@ server:
 client:
   ssl:
     keyStore: client.p12
+    keyStoreType: PKCS12
     keyStorePassword: changeit
     trustStore: backendRootCA.p12
+    trustStoreType: PKCS12
     trustStorePassword: changeit
 
 spring:

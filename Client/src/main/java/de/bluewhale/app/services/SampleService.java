@@ -68,7 +68,7 @@ public class SampleService {
         if (!lazyInitialized) {
 
             this.keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-            KeyStore keyStore = KeyStore.getInstance("PKCS12");
+            KeyStore keyStore = KeyStore.getInstance(sslProperties.getKeyStoreType());
             char[] keyPassword = sslProperties.getKeyStorePassword().toCharArray();
 
             Resource resource = new ClassPathResource(sslProperties.getKeyStore());
@@ -81,7 +81,7 @@ public class SampleService {
             }
 
             this.trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-            KeyStore trustStore = KeyStore.getInstance("PKCS12");
+            KeyStore trustStore = KeyStore.getInstance(sslProperties.getTrustStoreType());
 
             Resource resource2 = new ClassPathResource(sslProperties.getTrustStore());
             try (InputStream trustStoreData = resource.getInputStream()) {
