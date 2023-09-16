@@ -16,13 +16,11 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.TrustManagerFactory;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.KeyStore;
@@ -47,23 +45,16 @@ public class SampleService {
 
     private boolean lazyInitialized = false;
 
-    private SslContext sslContext_with_client_cert = SslContextBuilder
-            .forClient()
-            .keyManager(this.keyManagerFactory)
-            .trustManager(this.trustManagerFactory)
-            .build();
+    private SslContext sslContext_with_client_cert;
 
 
-    private SslContext sslContext_only_with_server_ca = SslContextBuilder
-            .forClient()
-            .trustManager(trustManagerFactory)
-            .build();
+    private SslContext sslContext_only_with_server_ca;
 
     public SampleService() throws SSLException {
     }
 
 
-    private void lazyInit() throws NoSuchAlgorithmException, KeyStoreException {
+    private void lazyInit() throws NoSuchAlgorithmException, KeyStoreException, SSLException {
 
         if (!lazyInitialized) {
 
@@ -84,12 +75,26 @@ public class SampleService {
             KeyStore trustStore = KeyStore.getInstance(sslProperties.getTrustStoreType());
 
             Resource resource2 = new ClassPathResource(sslProperties.getTrustStore());
-            try (InputStream trustStoreData = resource.getInputStream()) {
+            try (InputStream trustStoreData = resource2.getInputStream()) {
                 trustStore.load(trustStoreData, keyPassword);
                 trustManagerFactory.init(trustStore);
             } catch (IOException | NoSuchAlgorithmException | CertificateException | KeyStoreException e) {
                 e.printStackTrace();
             }
+
+            // Create two SSL contexts to demonstrate the different
+            // request behavior
+
+            sslContext_with_client_cert = SslContextBuilder
+                    .forClient()
+                    .keyManager(this.keyManagerFactory)
+                    .trustManager(this.trustManagerFactory)
+                    .build();
+
+            sslContext_only_with_server_ca = SslContextBuilder
+                    .forClient()
+                    .trustManager(trustManagerFactory)
+                    .build();
 
             lazyInitialized = true;
         }
@@ -100,7 +105,7 @@ public class SampleService {
 
         try {
             lazyInit();
-        } catch (NoSuchAlgorithmException | KeyStoreException e) {
+        } catch (NoSuchAlgorithmException | KeyStoreException | SSLException e) {
             log.error("Could not initzialice clients ssl context.",e);
             throw new RuntimeException(e);
         }
@@ -124,8 +129,8 @@ public class SampleService {
 
         try {
             lazyInit();
-        } catch (NoSuchAlgorithmException | KeyStoreException e) {
-            log.error("Could not initzialice clients ssl context.",e);
+        } catch (NoSuchAlgorithmException | KeyStoreException | SSLException e) {
+            log.error("Could not initialize clients ssl context.",e);
             throw new RuntimeException(e);
         }
 

@@ -7,8 +7,11 @@ Certificate_Factory/*.key
 Certificate_Factory/*.crt
 Certificate_Factory/*.csr
 Certificate_Factory/*.srl
+Certificate_Factory/*.pem
 Backend/src/main/resources/*.p12
+Backend/src/main/resources/*.pem
 Client/src/main/resources/*.p12
+Client/src/main/resources/*.pem
 
 ### IntelliJ IDEA ###
 .idea/

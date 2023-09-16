@@ -18,6 +18,7 @@ rm *.crt
 rm *.csr
 rm *.srl
 rm *.p12
+rm *.pem
 rm ../Backend/src/main/resources/*.p12
 rm ../Client/src/main/resources/*.p12
 
